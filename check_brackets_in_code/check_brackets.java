@@ -34,14 +34,27 @@ class check_brackets {
             char next = text.charAt(position);
 
             if (next == '(' || next == '[' || next == '{') {
-                // Process opening bracket, write your code here
+                opening_brackets_stack.push(new Bracket(next, position + 1));
             }
 
             if (next == ')' || next == ']' || next == '}') {
-                // Process closing bracket, write your code here
+                if (!opening_brackets_stack.empty()) {
+                    Bracket last = opening_brackets_stack.pop();
+                    if (!last.Match(next)) {
+                        System.out.println(position + 1);
+                        System.exit(0);
+                    }
+                } else {
+                    System.out.println(position + 1);
+                    System.exit(0);
+                }
             }
         }
-
-        // Printing answer, write your code here
+        if (opening_brackets_stack.empty()) {
+            System.out.println("Success");
+        } else {
+            int pos = opening_brackets_stack.pop().position;
+            System.out.println(pos);
+        }
     }
 }

@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class tree_height {
+
     class FastScanner {
 		StringTokenizer tok = new StringTokenizer("");
 		BufferedReader in;
@@ -20,10 +21,30 @@ public class tree_height {
 		}
 	}
 
+	class Node {
+		int index;
+		List<Integer> children;
+
+		Node(int index) {
+			this.index = index;
+			this.children = new ArrayList<Integer>();
+		}
+
+		public void addChildren(int node) {
+			this.children.add(node);
+		}
+
+		public List<Integer> getChildren() {
+			return this.children;
+		}
+	}
+
 	public class TreeHeight {
 		int n;
 		int parent[];
-		
+		int root;
+		Node[] nodes;
+
 		void read() throws IOException {
 			FastScanner in = new FastScanner();
 			n = in.nextInt();
@@ -44,6 +65,36 @@ public class tree_height {
 			}
 			return maxHeight;
 		}
+
+		int computeHight2() {
+			nodes = new Node[n];
+			for (int i = 0; i < n; i++) {
+				if (parent[i] == -1) {
+					root = i;
+					break;
+				}
+			}
+			for (int i = 0; i < n; i++) {
+				nodes[i] = new Node(i);
+			}
+			for (int i = 0; i < n; i++) {
+				if (parent[i] != -1) {
+					 nodes[parent[i]].addChildren(i);
+				}
+			}
+			return getHeight(nodes[root]);
+		}
+
+		int getHeight(Node node) {
+			if (node.children.size() == 0)
+				return 1;
+			int height = -1;
+			for (int c: node.getChildren()) {
+				int currentHeight = getHeight(nodes[c]);
+				if (currentHeight > height) height = currentHeight;
+			}
+			return 1 + height;
+		}
 	}
 
 	static public void main(String[] args) throws IOException {
@@ -59,6 +110,6 @@ public class tree_height {
 	public void run() throws IOException {
 		TreeHeight tree = new TreeHeight();
 		tree.read();
-		System.out.println(tree.computeHeight());
+		System.out.println(tree.computeHight2()); // System.out.println(tree.computeHeight());
 	}
 }
