@@ -12,6 +12,7 @@ public class PhoneBook {
     private FastScanner in = new FastScanner();
     // Keep list of all existing (i.e. not deleted yet) contacts.
     private List<Contact> contacts = new ArrayList<>();
+    private String[] numberNameMap = new String[10000000];
 
     public static void main(String[] args) {
         new PhoneBook().processQueries();
@@ -30,6 +31,24 @@ public class PhoneBook {
 
     private void writeResponse(String response) {
         System.out.println(response);
+    }
+
+    private void initialize() {
+        for (int i = 0; i < numberNameMap.length; i++) {
+            numberNameMap[i] = "";
+        }
+    }
+
+    private void processQuery2(Query query) {
+        if (query.type.equals("add")) {
+            numberNameMap[query.number] = query.name;
+        } else if (query.type.equals("del")) {
+            numberNameMap[query.number] = "";
+        } else {
+            String response = numberNameMap[query.number];
+            if (response.equals("")) response = "not found";
+            writeResponse(response);
+        }
     }
 
 
@@ -65,6 +84,7 @@ public class PhoneBook {
     }
 
     public void processQueries() {
+        initialize();
         int queryCount = in.nextInt();
         for (int i = 0; i < queryCount; ++i)
             processQuery(readQuery());
