@@ -87,7 +87,7 @@ public class PhoneBook {
         initialize();
         int queryCount = in.nextInt();
         for (int i = 0; i < queryCount; ++i)
-            processQuery(readQuery());
+            processQuery2(readQuery());
     }
 
     static class Contact {
