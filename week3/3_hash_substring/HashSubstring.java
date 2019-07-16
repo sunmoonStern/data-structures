@@ -34,16 +34,16 @@ public class HashSubstring {
         int m = s.length(), n = t.length();
         List<Integer> occurrences = new ArrayList<Integer>();
         for (int i = 0; i + m <= n; ++i) {
-	    boolean equal = true;
-	    for (int j = 0; j < m; ++j) {
-		if (s.charAt(j) != t.charAt(i + j)) {
-		     equal = false;
- 		    break;
-		}
-	    }
+            boolean equal = true;
+            for (int j = 0; j < m; ++j) {
+                if (s.charAt(j) != t.charAt(i + j)) {
+                    equal = false;
+                    break;
+                }
+            }
             if (equal)
                 occurrences.add(i);
-	}
+        }
         return occurrences;
     }
 
