@@ -57,11 +57,10 @@ public class HashSubstring {
         int m = s.length(), n = t.length();
         List<Integer> results = new ArrayList<>();
         long pHash = getPolyHash(s, p, x);
+        long[] tHashes = preComputeHashes(t, m, p, x);
         for (int i = 0; i <= n - m; i++) {
-            String substr = t.substring(i, i + m);
-            long tHash = getPolyHash(substr, p, x);
-            if (pHash != tHash) continue;
-            if (AreEqual(s, substr)) results.add(i);
+            if (pHash != tHashes[i]) continue;
+            if (AreEqual(s, t.substring(i, i + m))) results.add(i);
         }
         return results;
     }
@@ -80,6 +79,20 @@ public class HashSubstring {
             hash = (hash * x + s.charAt(i)) % p;
         }
         return hash;
+    }
+
+    private static long[] preComputeHashes(String t, int m, long p, long x) {
+        String s = t.substring(t.length() - m, t.length());
+        long[] hashes = new long[t.length() - m + 1];
+        hashes[t.length() - m] = getPolyHash(s, p, x);
+        long y = 1;
+        for (int i = 1; i <= m; i++) {
+            y = (y * x) % p;
+        }
+        for (int i = t.length() - m - 1; i >= 0; i--) {
+            hashes[i] = ((x * hashes[i + 1] + t.charAt(i) - y * t.charAt(i + m)) % p + p) % p;
+        }
+        return hashes;
     }
 
     static class Data {
