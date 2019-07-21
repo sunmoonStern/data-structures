@@ -187,14 +187,21 @@ public class SetRangeSum {
     }
 
     void erase(int x) {
-        // Implement erase yourself
-
+        VertexPair leftRight = split(root, x);
+        if (leftRight == null) return;
+        Vertex left = leftRight.left;
+        Vertex middle = leftRight.right;
+        if (middle == null) return;
+        VertexPair res = split(middle, x + 1);
+        Vertex middleLeft = res.left;
+        Vertex middleRight = res.right;
+        root = merge(left, middleRight);
     }
 
     boolean find(int x) {
-        // Implement find yourself
-
-        return false;
+        Vertex found = find(root, x).left;
+        if (found == null) return false;
+        return found.key == x;
     }
 
     long sum(int from, int to) {
@@ -205,8 +212,7 @@ public class SetRangeSum {
         middle = middleRight.left;
         Vertex right = middleRight.right;
         long ans = 0;
-        // Complete the implementation of sum
-
+        if (middle != null) ans = middle.sum;
         return ans;
     }
 
