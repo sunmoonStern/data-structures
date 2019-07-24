@@ -191,7 +191,7 @@ public class SetRangeSum {
         if (leftRight == null) return;
         Vertex left = leftRight.left;
         Vertex middle = leftRight.right;
-        if (middle == null) return;
+        if (middle == null) root = merge(left, middle);
         VertexPair res = split(middle, x + 1);
         Vertex middleLeft = res.left;
         Vertex middleRight = res.right;
@@ -200,6 +200,7 @@ public class SetRangeSum {
 
     boolean find(int x) {
         Vertex found = find(root, x).left;
+        root = find(root, x).right;
         if (found == null) return false;
         return found.key == x;
     }
