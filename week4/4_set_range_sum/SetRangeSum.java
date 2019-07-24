@@ -213,9 +213,23 @@ public class SetRangeSum {
         Vertex right = middleRight.right;
         long ans = 0;
         if (middle != null) ans = middle.sum;
+        // need to merge back the tree
+        root = merge(merge(left, middle), right);
         return ans;
     }
 
+    List<Integer> inOrder() {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        getInOrder(root, result);
+        return result;
+    }
+
+    void getInOrder(Vertex v, List<Integer> res) {
+        if (v == null) return;
+        getInOrder(v.left, res);
+        res.add(v.key);
+        getInOrder(v.right, res);
+    }
 
     public static final int MODULO = 1000000001;
 
