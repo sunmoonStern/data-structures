@@ -46,8 +46,42 @@ public class is_bst {
         }
 
         boolean isBinarySearchTree() {
-          // Implement correct algorithm here
-          return true;
+            // Implement correct algorithm here
+            if (nodes == 0) return true;
+            List<Integer> smallerIndex = new ArrayList<Integer>();
+            List<Integer> greaterIndex = new ArrayList<Integer>();
+            int i = 0;
+            Node node = tree[i];
+            isOkNode(node, smallerIndex, greaterIndex);
+        }
+
+        boolean isOkNode(Node node, List<Integer> smallerIndex, List<Integer> greaterIndex) {
+            List<Integer> newSmallerIndex = new ArrayList<Integer>();
+            List<Integer> newGreaterIndex = new ArrayList<Integer>();
+            newSmallerIndex.addAll(smallerIndex);
+            newGreaterIndex.addAll(greaterIndex);
+            int left = node.left;
+            if (left != -1) {
+                newGreaterIndex.add(node.key);
+                if(!isOk(left, smallerIndex, newGreaterIndex)) return false;
+            }
+            int right = node.right;
+            if (right != -1) {
+                newSmallerIndex.add(node.key);
+                if (!isOk(right, newSmallerIndex, greaterIndex)) return false;
+            }
+            return true;
+        }
+
+        boolean isOk(int index, List<Integer> smallerIndex, List<Integer> greaterIndex) {
+            int key = tree[index].key;
+            for (int j: smallerIndex) {
+                if (j >= key) return false;
+            }
+            for (int j: greaterIndex) {
+                if (j <= key) return false;
+            }
+            return true;
         }
     }
 
@@ -64,7 +98,7 @@ public class is_bst {
     public void run() throws IOException {
         IsBST tree = new IsBST();
         tree.read();
-        if (tree.solve()) {
+        if (tree.isBinarySearchTree()) {
             System.out.println("CORRECT");
         } else {
             System.out.println("INCORRECT");
