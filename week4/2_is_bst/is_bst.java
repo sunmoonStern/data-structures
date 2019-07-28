@@ -79,9 +79,6 @@ public class is_bst {
 
         boolean isOk(Node node, List<Integer> smallerIndex, List<Integer> greaterIndex) {
             int key = node.key;
-//            System.out.println("Checking for index = " + index + " key = " + key);
-//            System.out.println("smaller index  = " + smallerIndex);
-//            System.out.println("greater index = " + greaterIndex);
             for (int j: smallerIndex) {
                 if (j >= key) return false;
             }
@@ -89,6 +86,34 @@ public class is_bst {
                 if (j <= key) return false;
             }
             return true;
+        }
+
+        boolean isBinarySearchTree2() {
+            // Implement correct algorithm here
+            if (nodes == 0) return true;
+            List<Integer> elements = inOrder();
+            int prevInt = - (int) Math.pow(2, 31);
+            for (int i: elements) {
+                if (i < prevInt) {
+                    return false;
+                } else {
+                    prevInt = i;
+                }
+            }
+            return true;
+        }
+
+        List<Integer> inOrder() {
+            ArrayList<Integer> result = new ArrayList<Integer>();
+            getInOrder(0, result);
+            return result;
+        }
+
+        void getInOrder(int k, List<Integer> res) {
+            if (k == -1) return;
+            getInOrder(tree[k].left, res);
+            res.add(tree[k].key);
+            getInOrder(tree[k].right, res);
         }
     }
 
@@ -105,7 +130,7 @@ public class is_bst {
     public void run() throws IOException {
         IsBST tree = new IsBST();
         tree.read();
-        if (tree.isBinarySearchTree()) {
+        if (tree.isBinarySearchTree2()) {
             System.out.println("CORRECT");
         } else {
             System.out.println("INCORRECT");
