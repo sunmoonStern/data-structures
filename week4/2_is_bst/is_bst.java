@@ -48,33 +48,40 @@ public class is_bst {
         boolean isBinarySearchTree() {
             // Implement correct algorithm here
             if (nodes == 0) return true;
-            List<Integer> smallerIndex = new ArrayList<Integer>();
-            List<Integer> greaterIndex = new ArrayList<Integer>();
+            List<Integer> smallerKeys = new ArrayList<Integer>();
+            List<Integer> greaterKeys = new ArrayList<Integer>();
             int i = 0;
             Node node = tree[i];
-            isOkNode(node, smallerIndex, greaterIndex);
+            return isOkNode(node, smallerKeys, greaterKeys);
         }
 
-        boolean isOkNode(Node node, List<Integer> smallerIndex, List<Integer> greaterIndex) {
-            List<Integer> newSmallerIndex = new ArrayList<Integer>();
-            List<Integer> newGreaterIndex = new ArrayList<Integer>();
-            newSmallerIndex.addAll(smallerIndex);
-            newGreaterIndex.addAll(greaterIndex);
+        boolean isOkNode(Node node, List<Integer> smallerKeys, List<Integer> greaterKeys) {
+            boolean result1 = true;
+            boolean result2 = true;
             int left = node.left;
             if (left != -1) {
-                newGreaterIndex.add(node.key);
-                if(!isOk(left, smallerIndex, newGreaterIndex)) return false;
+                List<Integer> newGreaterKeys = new ArrayList<Integer>();
+                newGreaterKeys.addAll(greaterKeys);
+                newGreaterKeys.add(node.key);
+                if(!isOk(tree[left], smallerKeys, newGreaterKeys)) return false;
+                result1 = isOkNode(tree[left], smallerKeys, newGreaterKeys);
             }
             int right = node.right;
             if (right != -1) {
-                newSmallerIndex.add(node.key);
-                if (!isOk(right, newSmallerIndex, greaterIndex)) return false;
+                List<Integer> newSmallerKeys = new ArrayList<Integer>();
+                newSmallerKeys.addAll(smallerKeys);
+                newSmallerKeys.add(node.key);
+                if (!isOk(tree[right], newSmallerKeys, greaterKeys)) return false;
+                result2 = isOkNode(tree[right], newSmallerKeys, greaterKeys);
             }
-            return true;
+            return result1 && result2;
         }
 
-        boolean isOk(int index, List<Integer> smallerIndex, List<Integer> greaterIndex) {
-            int key = tree[index].key;
+        boolean isOk(Node node, List<Integer> smallerIndex, List<Integer> greaterIndex) {
+            int key = node.key;
+//            System.out.println("Checking for index = " + index + " key = " + key);
+//            System.out.println("smaller index  = " + smallerIndex);
+//            System.out.println("greater index = " + greaterIndex);
             for (int j: smallerIndex) {
                 if (j >= key) return false;
             }
